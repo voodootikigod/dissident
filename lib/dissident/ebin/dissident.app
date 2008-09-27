@@ -9,6 +9,6 @@
               dissident_web,
               dissident_deps]},
    {registered,[dissident_sup]},
-   {applications, [kernel, stdlib, mochiweb]},
+   {applications, [kernel, stdlib, mochiweb, crypto]},
    {mod, {dissident_app,[]}},
    {start_phases, []}]}.

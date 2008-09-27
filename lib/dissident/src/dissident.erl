@@ -23,13 +23,14 @@ ensure_started(App) ->
 %% @doc Start the mochisample server.
 start() ->
     % dissident_deps:ensure(),
-    % ensure_started(crypto),
+    ensure_started(crypto),
+    ensure_started(mochiweb),
     application:start(dissident).
 
 %% @spec stop() -> ok
 %% @doc Stop the mochisample server.
 stop() ->
     Res = application:stop(dissident),
-    % application:stop(crypto),
+    application:stop(crypto),
     Res.
 
