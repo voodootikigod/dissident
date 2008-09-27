@@ -5,7 +5,7 @@
 %%% @end
 %%% @copyright 2008 Iterative Designs
 %%%----------------------------------------------------------------,
--module(mochiweb_app).
+-module(dissident_app).
 
 -behaviour(application).
 
@@ -33,7 +33,7 @@
 %% @end
 %%--------------------------------------------------------------------
 start(_StartType, _StartArgs) ->
-    case mochiweb_sup:start_link() of
+    case dissident_sup:start_link() of
         {ok, Pid} ->
             {ok, Pid};
         Error ->

@@ -4,7 +4,7 @@
 %%% @end
 %%% @copyright 2008 Iterative Designs
 %%%----------------------------------------------------------------
--module(mochiweb_sup).
+-module(dissident_sup).
 
 -behaviour(supervisor).
 
