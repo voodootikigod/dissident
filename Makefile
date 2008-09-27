@@ -6,3 +6,6 @@ test:
 
 clean:
 	(cd src;$(MAKE) clean)
+
+run:
+	erl -sname console -pa ebin -setcookie iterative
