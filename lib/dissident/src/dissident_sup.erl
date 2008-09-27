@@ -47,6 +47,8 @@ start_link() ->
 %%                     {error, Reason}
 %% @end
 %%--------------------------------------------------------------------
+
+
 init([]) ->
     RestartStrategy = one_for_one,
     MaxRestarts = 1000,
@@ -58,10 +60,10 @@ init([]) ->
     Shutdown = 2000,
     Type = worker,
 
-    AChild = {'AName', {'AModule', start_link, []},
-              Restart, Shutdown, Type, ['AModule']},
+    Dissident = {dissident, {dissident, start_link, []},
+              Restart,Shutdown,Type,[dissident]},
 
-    {ok, {SupFlags, [AChild]}}.
+    {ok, {SupFlags, [Dissident]}}.
 
 %%%===================================================================
 %%% Internal functions
