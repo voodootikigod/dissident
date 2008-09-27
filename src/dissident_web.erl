@@ -1,10 +1,14 @@
-%% @author author <author@example.com>
-%% @copyright YYYY author.
-
-%% @doc Web server for dissident.
+%%%----------------------------------------------------------------
+%%% @author Chris Williams <chris@iterativedesigns.com>
+%%% @doc
+%%%		The Dissident Web Router that will proxy and handle traffic
+%%%		based on the defined rules of the system.
+%%% @end
+%%% @copyright 2008 Iterative Designs
+%%%----------------------------------------------------------------,
 
 -module(dissident_web).
--author('author <author@example.com>').
+-author('Chris Williams <chris@iterativedesigns.com>').
 
 -export([start/1, stop/0, loop/2]).
 
@@ -23,16 +27,14 @@ stop() ->
 loop(Req, DocRoot) ->
     "/" ++ Path = Req:get(path),
     FullPath = filename:join([DocRoot, mochiweb_util:safe_relative_path(Path)]),
-	case filelib:is_dir(FullPath)
-
-
-	case  of
-        undefined	->
-			io:format("query methods");
-		RelPath ->
-			io:format("~p~n",[RelPath]),
-			Req:serve_file(Path,DocRoot)
-	end.
+		Dir = filelib:is_dir(FullPath),
+		File = filelib:is_file(FullPath),
+		case File of
+			true	->
+				Req:serve_file(Path,DocRoot);
+			_ ->
+				io:format("Query for code.")
+		end.
 
 %% Internal API
 

@@ -41,10 +41,11 @@ upgrade() ->
 %% @spec init([]) -> SupervisorTree
 %% @doc supervisor callback.
 init([]) ->
-    Ip = case os:getenv("MOCHIWEB_IP") of false -> "0.0.0.0"; Any -> Any end,   
+    Ip = case os:getenv("DISSIDENT_IP") of false -> "0.0.0.0"; Any -> Any end, 
+    Port = case os:getenv("DISSIDENT_PORT") of false -> 8080; AnyPort -> AnyPort end,  
     WebConfig = [
-         {ip, Ip},
-                 {port, 8000},
+				         {ip, Ip},
+                 {port, Port},
                  {docroot, dissident_deps:local_path(["priv", "www"])}],
     Web = {dissident_web,
            {dissident_web, start, [WebConfig]},

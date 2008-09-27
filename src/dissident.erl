@@ -1,10 +1,13 @@
-%% @author author <author@example.com>
-%% @copyright YYYY author.
-
-%% @doc TEMPLATE.
+%%%----------------------------------------------------------------
+%%% @author Chris Williams <chris@iterativedesigns.com>
+%%% @doc
+%%%		The Dissident Web Application Server.
+%%% @end
+%%% @copyright 2008 Iterative Designs
+%%%----------------------------------------------------------------,
 
 -module(dissident).
--author('author <author@example.com>').
+-author('Chris Williams <chris@iterativedesigns.com>').
 -export([start/0, stop/0]).
 
 ensure_started(App) ->
