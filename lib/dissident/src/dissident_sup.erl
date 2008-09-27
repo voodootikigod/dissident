@@ -1,72 +1,58 @@
 %%%----------------------------------------------------------------
-%%% @author  Chris Williams <chris@iterativedesigns.com>
+%%% @author Chris Williams <chris@iterativedesigns.com>
 %%% @doc
+%%%		The Dissident server supervisor that will provide fault
+%%%		tolerant operation for the server.
 %%% @end
 %%% @copyright 2008 Iterative Designs
-%%%----------------------------------------------------------------
+%%%----------------------------------------------------------------,
+
 -module(dissident_sup).
+-author('Chris Williams <chris@iterativedesigns.com>').
 
 -behaviour(supervisor).
 
-%% API
--export([start_link/0]).
+%% External exports
+-export([start_link/0, upgrade/0]).
 
-%% Supervisor callbacks
+%% supervisor callbacks
 -export([init/1]).
 
--define(SERVER, ?MODULE).
-
-%%%===================================================================
-%%% API functions
-%%%===================================================================
-
-%%--------------------------------------------------------------------
-%% @doc
-%% Starts the supervisor
-%%
-%% @spec start_link() -> {ok, Pid} | ignore | {error, Error}
-%% @end
-%%--------------------------------------------------------------------
+%% @spec start_link() -> ServerRet
+%% @doc API for starting the supervisor.
 start_link() ->
-    supervisor:start_link({local, ?SERVER}, ?MODULE, []).
+    supervisor:start_link({local, ?MODULE}, ?MODULE, []).
 
-%%%===================================================================
-%%% Supervisor callbacks
-%%%===================================================================
+%% @spec upgrade() -> ok
+%% @doc Add processes if necessary.
+upgrade() ->
+    {ok, {_, Specs}} = init([]),
 
-%%--------------------------------------------------------------------
-%% @private
-%% @doc
-%% Whenever a supervisor is started using supervisor:start_link/[2,3],
-%% this function is called by the new process to find out about
-%% restart strategy, maximum restart frequency and child
-%% specifications.
-%%
-%% @spec init(Args) -> {ok, {SupFlags, [ChildSpec]}} |
-%%                     ignore |
-%%                     {error, Reason}
-%% @end
-%%--------------------------------------------------------------------
+    Old = sets:from_list(
+            [Name || {Name, _, _, _} <- supervisor:which_children(?MODULE)]),
+    New = sets:from_list([Name || {Name, _, _, _, _, _} <- Specs]),
+    Kill = sets:subtract(Old, New),
 
+    sets:fold(fun (Id, ok) ->
+                      supervisor:terminate_child(?MODULE, Id),
+                      supervisor:delete_child(?MODULE, Id),
+                      ok
+              end, ok, Kill),
 
+    [supervisor:start_child(?MODULE, Spec) || Spec <- Specs],
+    ok.
+
+%% @spec init([]) -> SupervisorTree
+%% @doc supervisor callback.
 init([]) ->
-    RestartStrategy = one_for_one,
-    MaxRestarts = 1000,
-    MaxSecondsBetweenRestarts = 3600,
+    Ip = case os:getenv("DISSIDENT_IP") of false -> "0.0.0.0"; Any -> Any end,   
+    WebConfig = [
+         {ip, Ip},
+                 {port, 8000},
+                 {docroot, dissident_deps:local_path(["priv", "www"])}],
+    Web = {dissident_web,
+           {dissident_web, start, [WebConfig]},
+           permanent, 5000, worker, dynamic},
 
-    SupFlags = {RestartStrategy, MaxRestarts, MaxSecondsBetweenRestarts},
-
-    Restart = permanent,
-    Shutdown = 2000,
-    Type = worker,
-
-    Dissident = {dissident, {dissident, start_link, []},
-              Restart,Shutdown,Type,[dissident]},
-
-    {ok, {SupFlags, [Dissident]}}.
-
-%%%===================================================================
-%%% Internal functions
-%%%===================================================================
-
-
+    Processes = [Web],
+    {ok, {{one_for_one, 10, 10}, Processes}}.
