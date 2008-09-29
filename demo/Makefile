@@ -1,6 +1,6 @@
 ERL          ?= erl
-EBIN_DIRS    := $(wildcard deps/*/ebin)
-APP          := webmachine
+EBIN_DIRS    := $(wildcard webmachine/ebin)
+APP          := webmachine_demo
 
 all: erl ebin/$(APP).app
 
@@ -15,5 +15,5 @@ clean:
 	@echo "removing:"
 	@rm -fv ebin/*.beam ebin/*.app
 
-ebin/$(APP).app:
+ebin/$(APP).app: src/$(APP).app
 	@cp -v src/$(APP).app $@

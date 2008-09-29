@@ -1,6 +1,6 @@
 ERL          ?= erl
 EBIN_DIRS    := $(wildcard deps/*/ebin)
-APP          := webmachine
+APP          := skel
 
 all: erl ebin/$(APP).app
 
