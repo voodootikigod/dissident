@@ -4,6 +4,10 @@ APP          := webmachine
 
 all: erl ebin/$(APP).app
 
+submodules:
+	git submodule init
+	git submodule update
+
 erl:
 	@$(ERL) -pa $(EBIN_DIRS) -noinput +B \
 	  -eval 'case make:all() of up_to_date -> halt(0); error -> halt(1) end.'
