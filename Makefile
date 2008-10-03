@@ -1,12 +1,13 @@
 ERL          ?= erl
 EBIN_DIRS    := $(wildcard deps/*/ebin)
-APP          := webmachine
+APP          := dissident
 
 all: erl ebin/$(APP).app
 	(cd deps/mochiweb ;make) 
+	(cd deps/webmachine ;make)
 	
 
-submodules:
+update:
 	git submodule init
 	git submodule update
 
