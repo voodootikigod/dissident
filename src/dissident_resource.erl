@@ -1,15 +1,15 @@
-%% @author Andy Gross <andy@basho.com> 
-%% @author Justin Sheehy <justin@basho.com>
-%% @copyright 2007-2008 Basho Technologies, Inc.  All Rights Reserved.
-%% @doc Example webmachine_resource.
+%% @author Chris Williams <chris@iterativedesigns.com>
+%% @copyright 2008 Iterative Designs
 
--module(webmachine_demo_resource).
--author('Andy Gross <andy@basho.com>').
--author('Justin Sheehy <justin@basho.com>').
+%% @doc Resources for the dissident framework application.
+
+-module(dissident_resource).
+-author('Chris Williams <chris@iterativedesigns.com>').
+
 -export([init/1, to_html/2, to_text/2, content_types_provided/2,
          is_authorized/2, generate_etag/2, expires/2]).
 
--include_lib("webmachine/include/webmachine.hrl").
+-include_lib("deps/webmachine/include/webmachine.hrl").
 
 init([]) -> {ok, undefined}.
     

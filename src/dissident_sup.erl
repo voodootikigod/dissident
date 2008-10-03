@@ -1,12 +1,10 @@
-%% @author Justin Sheehy <justin@basho.com>
-%% @author Andy Gross <andy@basho.com>
-%% @copyright 2007-2008 Basho Technologies
+%% @author Chris Williams <chris@iterativedesigns.com>
+%% @copyright 2008 Iterative Designs
 
-%% @doc Supervisor for the webmachine_demo application.
+%% @doc Supervisor for the dissident framework application.
 
--module(webmachine_demo_sup).
--author('Justin Sheehy <justin@basho.com>').
--author('Andy Gross <andy@basho.com>').
+-module(dissident_sup).
+-author('Chris Williams <chris@iterativedesigns.com>').
 
 -behaviour(supervisor).
 
@@ -22,16 +20,17 @@ start_link() ->
     supervisor:start_link({local, ?MODULE}, ?MODULE, []).
 
 dispatch_map() ->
-    [{["demo", '*'], webmachine_demo_resource, []},
+    [{["", '*'], dissident_resource, []},
      {["fs", '*'], demo_fs_resource, [{root, "/tmp/fs"}]}
     ].
 
 %% @doc supervisor callback.
 init([]) ->
-    Ip = case os:getenv("WEBMACHINE_IP") of false -> "0.0.0.0"; Any -> Any end,
+    Ip = case os:getenv("DISSIDENT_IP") of false -> "0.0.0.0"; Any -> Any end,
+    Port = case os:getenv("DISSIDENT_PORT") of false -> 8080; Any -> Any end,
     WebConfig = [
 		 {ip, Ip},
-		 {port, 8000},
+		 {port, Port},
                  {log_dir, "priv/log"},
 		 {dispatch, dispatch_map()}],
     Web = {webmachine_mochiweb,

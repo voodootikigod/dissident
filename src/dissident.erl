@@ -1,6 +1,11 @@
--module(webmachine_demo).
--author('Andy Gross <andy@basho.com>').
--author('Justin Sheehy <justin@@basho.com>').
+%% @author Chris Williams <chris@iterativedesigns.com>
+%% @copyright 2008 Iterative Designs
+
+%% @doc Callbacks for the dissident application.
+
+-module(dissident).
+-author('Chris Williams <chris@iterativedesigns.com>').
+
 -export([start/0, stop/0]).
 
 ensure_started(App) ->
@@ -16,12 +21,12 @@ ensure_started(App) ->
 start() ->
     ensure_started(crypto),
     ensure_started(webmachine),
-    application:start(webmachine_demo).
+    application:start(dissident).
 
 %% @spec stop() -> ok
 %% @doc Stop the webmachine_demo server.
 stop() ->
-    Res = application:stop(webmachine_demo),
+    Res = application:stop(dissident),
     application:stop(webmachine),
     application:stop(crypto),
     Res.
