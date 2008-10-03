@@ -27,7 +27,7 @@ dispatch_map() ->
 %% @doc supervisor callback.
 init([]) ->
     Ip = case os:getenv("DISSIDENT_IP") of false -> "0.0.0.0"; Any -> Any end,
-    Port = case os:getenv("DISSIDENT_PORT") of false -> 8080; Any -> Any end,
+    Port = case os:getenv("DISSIDENT_PORT") of false -> 8080; Any1 -> Any1 end,
     WebConfig = [
 		 {ip, Ip},
 		 {port, Port},
