@@ -3,6 +3,8 @@ EBIN_DIRS    := $(wildcard deps/*/ebin)
 APP          := webmachine
 
 all: erl ebin/$(APP).app
+	(cd deps/mochiweb ;make) 
+	
 
 submodules:
 	git submodule init
@@ -17,7 +19,7 @@ docs:
 
 clean: 
 	@echo "removing:"
-	@rm -fv ebin/*.beam ebin/*.app
+	@rm -fv ebin/*.beam ebin/*.app deps/*/ebin/*.app deps/*/ebin/*.beam
 
 ebin/$(APP).app:
 	@cp -v src/$(APP).app $@
