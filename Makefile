@@ -7,7 +7,7 @@ all: erl ebin/$(APP).app
 	(cd deps/webmachine ;make)
 	
 
-update:
+modules:
 	git submodule init
 	git submodule update
 
