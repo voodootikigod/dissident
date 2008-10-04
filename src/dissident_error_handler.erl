@@ -9,8 +9,26 @@
 -export([render_error/3]).
 
 render_error(404, Req, _Reason) ->
-    Req:add_response_header("Content-Type", "text/html"),
-    <<"<HTML><HEAD><TITLE>404 Not Found</TITLE></HEAD><BODY style='background:black; color:white;'><H1>Not Found</H1>There is only darkness down this path, <a href='javascript:history(-1)'>turn back now</a>.<P><HR><ADDRESS>Brought to by Dissident</ADDRESS></BODY></HTML>">>;
+    Req:add_response_header("Content-Type", "text/html"), 
+		<<"<html>
+		<head>
+			<title>404 Not Found</title>
+			<style type='text/css'>
+				body{ background:black; color:white; font-family:helvetica}
+				a, a:link, a:visited	{ color:orange; }
+				div { position:absolute; bottom:0px; right:0px; width:600px; padding:33px;}
+				address {font-size:10px}
+			</style>
+		</head>
+		<body>
+			<div>
+				<h1>Not Found</h1>
+				<p>There is only darkness down this path, <a href='javascript:history.go(-1)'>turn back now</a>.</p>
+				<hr/>
+				<address>Brought to by Dissident</address>
+			</div>
+		</body>
+	</html>">>;
 
 render_error(500, Req, Reason) ->
     Req:add_response_header("Content-Type", "text/html"),

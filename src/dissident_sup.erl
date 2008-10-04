@@ -20,9 +20,14 @@ start_link() ->
     supervisor:start_link({local, ?MODULE}, ?MODULE, []).
 
 dispatch_map() ->
+	% Dispatch stylesheets, javascripts, and images automatically as they are static resources
+	% Handle all others using dissident's router
     [
-	 {["/", '*'], dissident_resource, []},
-     {["fs", '*'], demo_fs_resource, [{root, "/tmp/fs"}]}
+			{["stylesheets", '*'], demo_fs_resource, [{root, "/tmp/fs"}]},
+			{["javascripts", '*'], demo_fs_resource, [{root, "/tmp/fs"}]},
+			{["images", '*'], demo_fs_resource, [{root, "/tmp/fs"}]},
+			{['*'], dissident_router, []}
+     	
     ].
 
 %% @doc supervisor callback.

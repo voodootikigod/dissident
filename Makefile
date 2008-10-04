@@ -3,6 +3,8 @@ EBIN_DIRS    := $(wildcard deps/*/ebin)
 APP          := dissident
 
 all: erl ebin/$(APP).app
+	mkdir -p deps/mochiweb/ebin
+	mkdir -p deps/webmachine/ebin
 	(cd deps/mochiweb ;make) 
 	(cd deps/webmachine ;make)
 	
@@ -25,8 +27,3 @@ clean:
 ebin/$(APP).app:
 	@cp -v src/$(APP).app $@
 
-dev:
-	exec erl -pa $PWD/ebin $PWD/deps/*/ebin -boot start_sasl -s reloader -s dissident
-
-run:
-	exec erl -pa $PWD/ebin $PWD/deps/*/ebin -boot start_sasl -s dissident

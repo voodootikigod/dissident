@@ -1,9 +1,9 @@
 %% @author Chris Williams <chris@iterativedesigns.com>
 %% @copyright 2008 Iterative Designs
 
-%% @doc Resources for the dissident framework application.
+%% @doc Router for the dissident framework application.
 
--module(dissident_resource).
+-module(dissident_router).
 -author('Chris Williams <chris@iterativedesigns.com>').
 
 -export([init/1, to_html/2, to_text/2, content_types_provided/2,
@@ -18,7 +18,7 @@ content_types_provided(_ReqProps, Context) ->
 
 to_text(ReqProps, Context) ->
     Path = ?PATH(ReqProps),
-    Body = io_lib:format("Hello ~s from webmachine.~n", [Path]),
+    Body = io_lib:format("Hello ~s from dissident.~n", [Path]),
     {Body, Context}.
 
 to_html(ReqProps, Context) ->
@@ -38,10 +38,10 @@ is_authorized(ReqProps, Context) ->
                         ["authdemo", "demo1"] ->
                             {true, Context};
                         _ ->
-                            {"Basic realm=webmachine", Context}
+                            {"Basic realm=dissident", Context}
                     end;
                 _ ->
-                    {"Basic realm=webmachine", Context}
+                    {"Basic realm=dissident", Context}
             end;
         _ -> {true, Context}
     end.
