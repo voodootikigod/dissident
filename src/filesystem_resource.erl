@@ -38,6 +38,7 @@ file_path(Context, Name) ->
 
 file_exists(Context, Name) ->
     NamePath = file_path(Context, Name),
+		io:format("~p~n", [NamePath]),
     case filelib:is_regular(NamePath) of 
 	true ->
 	    {true, NamePath};

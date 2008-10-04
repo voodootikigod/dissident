@@ -23,9 +23,9 @@ dispatch_map() ->
 	% Dispatch stylesheets, javascripts, and images automatically as they are static resources
 	% Handle all others using dissident's router
     [
-			{["stylesheets", '*'], demo_fs_resource, [{root, "/tmp/fs"}]},
-			{["javascripts", '*'], demo_fs_resource, [{root, "/tmp/fs"}]},
-			{["images", '*'], demo_fs_resource, [{root, "/tmp/fs"}]},
+			{["stylesheets", '*'], filesystem_resource, [{root, "priv/www/stylesheets"}]},
+			{["javascripts", '*'], filesystem_resource, [{root, "priv/www/javascripts"}]},
+			{["images", '*'], filesystem_resource, [{root, "priv/www/images"}]},
 			{['*'], dissident_router, []}
      	
     ].
