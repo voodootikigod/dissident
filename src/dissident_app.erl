@@ -13,7 +13,7 @@
 %% @spec start(_Type, _StartArgs) -> ServerRet
 %% @doc application start callback for dissident.
 start(_Type, _StartArgs) ->
-    webmachine_demo_sup:start_link().
+    dissident_sup:start_link().
 
 %% @spec stop(_State) -> ServerRet
 %% @doc application stop callback for dissident.

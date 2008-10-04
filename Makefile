@@ -24,3 +24,9 @@ clean:
 
 ebin/$(APP).app:
 	@cp -v src/$(APP).app $@
+
+dev:
+	exec erl -pa $PWD/ebin $PWD/deps/*/ebin -boot start_sasl -s reloader -s dissident
+
+run:
+	exec erl -pa $PWD/ebin $PWD/deps/*/ebin -boot start_sasl -s dissident

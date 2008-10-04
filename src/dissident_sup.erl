@@ -20,7 +20,8 @@ start_link() ->
     supervisor:start_link({local, ?MODULE}, ?MODULE, []).
 
 dispatch_map() ->
-    [{["", '*'], dissident_resource, []},
+    [
+	 {["/", '*'], dissident_resource, []},
      {["fs", '*'], demo_fs_resource, [{root, "/tmp/fs"}]}
     ].
 
@@ -31,8 +32,10 @@ init([]) ->
     WebConfig = [
 		 {ip, Ip},
 		 {port, Port},
-                 {log_dir, "priv/log"},
-		 {dispatch, dispatch_map()}],
+         {log_dir, "priv/log"},
+		 {dispatch, dispatch_map()},
+		 {error_handler, dissident_error_handler}
+		],
     Web = {webmachine_mochiweb,
 	   {webmachine_mochiweb, start, [WebConfig]},
 	   permanent, 5000, worker, dynamic},
