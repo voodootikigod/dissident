@@ -1,3 +1,4 @@
+priv/log/*
 ebin/*
 _build
 .DS_Store
