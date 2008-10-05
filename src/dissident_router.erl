@@ -14,18 +14,34 @@
 init([]) -> {ok, undefined}.
     
 content_types_provided(_ReqProps, Context) ->
-    {[{"text/html", to_html},{"text/plain",to_text}], Context}.
+    {[{"text/html", render_file},{"application/x-javascript",route_to_handler}, {"application/json",route_to_handler}], Context}.
+
+	
+allowed_methods(_ReqProps, Context) ->
+    {['HEAD', 'GET', 'PUT', 'DELETE', 'POST'], Context}.
+
 
 to_text(ReqProps, Context) ->
     Path = ?PATH(ReqProps),
     Body = io_lib:format("Hello ~s from dissident.~n", [Path]),
     {Body, Context}.
 
-to_html(ReqProps, Context) ->
-    {Body, Ctx2} = to_text(ReqProps, Context),
-    HBody = io_lib:format("<html><body>~s</body></html>~n",
-                          [erlang:iolist_to_binary(Body)]),
-    {HBody, Ctx2}.
+
+route_to_handler(ReqProps, Context)	->
+	Path = ?PATH(ReqProps),
+    Body = io_lib:format("JSON attempted: ~s.~n", [Path]),
+    {Body, Context}.
+	
+
+render_file(ReqProps, Context)	->
+    Path = ?PATH(ReqProps),
+    case maybe_fetch_object(Context, Path) of 
+	{true, NewContext} ->
+	    Body = NewContext#context.response_body,
+	    {Body, Context};
+	{false, NewContext} ->
+	    {error, NewContext}
+    end.
 
 is_authorized(ReqProps, Context) ->
     Req = ?REQ(ReqProps),
@@ -46,8 +62,14 @@ is_authorized(ReqProps, Context) ->
         _ -> {true, Context}
     end.
 
-expires(_ReqProps, Context) ->
-    {{{2009,1,1},{0,0,0}}, Context}.
+% expires(_ReqProps, Context) ->
+%     {{{2009,1,1},{0,0,0}}, Context}.
+
 
 generate_etag(ReqProps, Context) ->
     {?PATH(ReqProps), Context}.
+
+last_modified(ReqProps, Context) ->
+    {true, FullPath} = dissident_util:file_exists(Context, proplists:get_value(path, ReqProps)),
+    LMod = filelib:last_modified(FullPath),
+    {LMod, Context#context{metadata=[{'last-modified', httpd_util:rfc1123_date(LMod)}|Context#context.metadata]}}.
