@@ -6,25 +6,26 @@
 -module(dissident_router).
 -author('Chris Williams <chris@iterativedesigns.com>').
 
--export([init/1, to_html/2, to_text/2, content_types_provided/2,
+-export([init/1, content_types_provided/2, allowed_methods/2, last_modified/2,
          is_authorized/2, generate_etag/2, expires/2]).
 
+-record(context, {root,response_body=undefined,metadata=[]}).
 -include_lib("deps/webmachine/include/webmachine.hrl").
 
 init([]) -> {ok, undefined}.
     
 content_types_provided(_ReqProps, Context) ->
-    {[{"text/html", render_file},{"application/x-javascript",route_to_handler}, {"application/json",route_to_handler}], Context}.
+    {[{"text/html", render_file}, {"application/x-javascript",route_to_handler}, {"application/json",route_to_handler}], Context}.
 
 	
 allowed_methods(_ReqProps, Context) ->
     {['HEAD', 'GET', 'PUT', 'DELETE', 'POST'], Context}.
 
 
-to_text(ReqProps, Context) ->
-    Path = ?PATH(ReqProps),
-    Body = io_lib:format("Hello ~s from dissident.~n", [Path]),
-    {Body, Context}.
+% to_text(ReqProps, Context) ->
+%     Path = ?PATH(ReqProps),
+%     Body = io_lib:format("Hello ~s from dissident.~n", [Path]),
+%     {Body, Context}.
 
 
 route_to_handler(ReqProps, Context)	->
@@ -41,6 +42,22 @@ render_file(ReqProps, Context)	->
 	    {Body, Context};
 	{false, NewContext} ->
 	    {error, NewContext}
+    end.
+
+
+maybe_fetch_object(Context, Path) ->
+    % if returns {true, NewContext} then NewContext has response_body
+    case Context#context.response_body of
+	undefined ->
+	    case dissident_util:file_exists(Context#context.root, Path) of 
+		{true, FullPath} ->
+		    {ok, Value} = file:read_file(FullPath),
+		    {true, Context#context{response_body=Value}};
+		false ->
+		    {false, Context}
+	    end;
+	_Body ->
+	    {true, Context}
     end.
 
 is_authorized(ReqProps, Context) ->
@@ -62,14 +79,14 @@ is_authorized(ReqProps, Context) ->
         _ -> {true, Context}
     end.
 
-% expires(_ReqProps, Context) ->
-%     {{{2009,1,1},{0,0,0}}, Context}.
+expires(_ReqProps, Context) ->
+    {{{2009,1,1},{0,0,0}}, Context}.
 
 
 generate_etag(ReqProps, Context) ->
     {?PATH(ReqProps), Context}.
 
 last_modified(ReqProps, Context) ->
-    {true, FullPath} = dissident_util:file_exists(Context, proplists:get_value(path, ReqProps)),
+    {true, FullPath} = dissident_util:file_exists(Context#context.root, proplists:get_value(path, ReqProps)),
     LMod = filelib:last_modified(FullPath),
     {LMod, Context#context{metadata=[{'last-modified', httpd_util:rfc1123_date(LMod)}|Context#context.metadata]}}.

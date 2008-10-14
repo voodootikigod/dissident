@@ -1,15 +1,15 @@
 -module(dissident_util).
--export(file_path/2, file_exists/2).
+-export([file_path/2, file_exists/2]).
 
-file_path(Context, Name) ->
+file_path(Root, Name) ->
     RelName = case hd(Name) of
         "/" -> tl(Name);
         _ -> Name
     end,
-    filename:join([Context#context.root, RelName]).
+    filename:join([Root, RelName]).
 
-file_exists(Context, Name) ->
-    NamePath = file_path(Context, Name),
+file_exists(Root, Name) ->
+    NamePath = file_path(Root, Name),
     case filelib:is_regular(NamePath) of 
 	true ->
 	    {true, NamePath};
