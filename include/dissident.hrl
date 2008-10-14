@@ -12,3 +12,5 @@ ping(_ReqProps, State) ->
 -define(PATH(RP), proplists:get_value(path, RP)).
 
 
+
+-record(context, {root,response_body=undefined,metadata=[]}).

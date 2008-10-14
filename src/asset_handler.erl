@@ -27,7 +27,7 @@ allowed_methods(_ReqProps, Context) ->
 
 resource_exists(ReqProps, Context) ->
     Path = ?PATH(ReqProps),
-    case dissident_util:file_exists(Context, Path) of 
+    case dissident_util:file_exists(Context#context.root, Path) of 
 	{true, _} ->
 	    {true, Context};
 	_ ->
@@ -41,7 +41,7 @@ maybe_fetch_object(Context, Path) ->
     % if returns {true, NewContext} then NewContext has response_body
     case Context#context.response_body of
 	undefined ->
-	    case dissident_util:file_exists(Context, Path) of 
+	    case dissident_util:file_exists(Context#context.root, Path) of 
 		{true, FullPath} ->
 		    {ok, Value} = file:read_file(FullPath),
 		    {true, Context#context{response_body=Value}};
@@ -68,7 +68,7 @@ provide_content(ReqProps, Context) ->
     end.
 
 last_modified(ReqProps, Context) ->
-    {true, FullPath} = dissident_util:file_exists(Context, proplists:get_value(path, ReqProps)),
+    {true, FullPath} = dissident_util:file_exists(Context#context.root, proplists:get_value(path, ReqProps)),
     LMod = filelib:last_modified(FullPath),
     {LMod, Context#context{metadata=[{'last-modified', httpd_util:rfc1123_date(LMod)}|Context#context.metadata]}}.
 

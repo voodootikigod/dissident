@@ -37,5 +37,15 @@ render_error(500, Req, Reason) ->
     ErrorStart = "<html><head><title>500 Internal Server Error</title></head><body><h1>Internal Server Error</h1>The server encountered an error while processing this request:<br><pre>",
     ErrorEnd = "</pre><P><HR><ADDRESS>Brought to by Dissident</ADDRESS></body></html>",
     ErrorIOList = [ErrorStart,STString,ErrorEnd],
+    erlang:iolist_to_binary(ErrorIOList);
+
+
+render_error(Msg, Req, Reason) ->
+    Req:add_response_header("Content-Type", "text/html"),
+    error_logger:error_msg("dissident error: path=~p~n~p~n", [Req:path(), Reason]),
+    STString = io_lib:format("~p", [Reason]),
+    ErrorStart = "<html><head><title>500 Internal Server Error</title></head><body><h1>Internal Server Error</h1>The server encountered an error while processing this request:<br><pre>",
+    ErrorEnd = "</pre><P><HR><ADDRESS>Brought to you from the depths of Dissident</ADDRESS></body></html>",
+    ErrorIOList = [ErrorStart,STString,ErrorEnd],
     erlang:iolist_to_binary(ErrorIOList).
 

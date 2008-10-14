@@ -26,7 +26,7 @@ dispatch_map() ->
 			{["stylesheets", '*'], asset_handler, [{root, "priv/www/stylesheets"}]},
 			{["javascripts", '*'], asset_handler, [{root, "priv/www/javascripts"}]},
 			{["images", '*'], asset_handler, [{root, "priv/www/images"}]},
-			{['*'], dissident_router, []}
+			{['*'], dissident_router, [{root, "priv/www"}]}
      	
     ].
 
