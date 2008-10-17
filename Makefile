@@ -10,9 +10,14 @@ build_modules:
 	(cd deps/mochiweb ;make) 
 	(cd deps/webmachine ;make)
 
-modules:
+init_modules:
 	git submodule init
 	git submodule update
+
+update_modules:
+	git submodule update
+	(cd deps/mochiweb ;git remote update) 
+	(cd deps/webmachine ;git remote update)
 
 erl:
 	@$(ERL) -pa $(EBIN_DIRS) -noinput +B \
