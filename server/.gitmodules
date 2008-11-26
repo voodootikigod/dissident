@@ -1,0 +1,6 @@
+[submodule "lib/mochiweb"]
+	path = lib/mochiweb
+	url = git://github.com/tswicegood/mochiweb.git
+[submodule "lib/webmachine"]
+	path = lib/webmachine
+	url = git://github.com/voodootikigod/webmachine.git

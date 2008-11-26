@@ -1,13 +1,7 @@
-The Dissident Project
-=====================
+What is Dissident?
+==================
 
-Dissident is a loose collection of web application libraries designed from the ground up to solve most of the problems plaguing other framework by simply looking at the past. The project will stick to its namesake by going right where others went -wrong- left. For discussion and questions please use the IRC room #dissident on irc.freenode.net or the github wiki for the project at http://github.com/voodootikigod/dissident/wikis. Originally Dissident was meant to be a packaged solution for building web applications, but due to time constraints we are going to be building the components of Dissident, which can be used with any application framework (Rails, django, perl, app engine, etc). Eventually we will button up the entire project with an application stack, but the benefit of the project is not its final stack, but the parts which can be leveraged in nearly all frameworks using JavaScript and other similar concepts.
-
-
-Original Concept
-================
-
-Here is the original concept of the framework:
+Dissident is a brand new web application framework designed from the ground up to solve most of the problems plaguing other framework by simply looking at the past. The project will stick to its namesake by going right where others went -wrong- left. For discussion and questions please use the IRC room #dissident on irc.freenode.net or the github wiki for the project at http://github.com/voodootikigod/dissident/wikis. Here is the general concept of the framework:
 
 Backend
 -------
@@ -25,6 +19,7 @@ Front End
 ---------
 
 The front end is split in to the typical trinity for web development, style (CSS), structure (HTML), and behavior (JS). Only in the case of Dissident we are embracing the modern web world instead of rehashing old stuff. With Javascript and AJAX engines being powerhouses these days, we are going to put them to the test. Dissident utilizes the AJAX Head design pattern as its core mantra for UI development. Designers simply generate CSS and HTML with minimal “single instance” templates (render a single item) built in; those are served directly to the browser. Doing this eliminates the need for caching, optimizes the system for CDN delivery, and removes all the pain (and inability to test) associated with co-mingled views. JQuery (current selection) is employed to query back to the API backend and obtain and render the dynamic elements of the site. In this manner the structure can be verified independently of the dynamic rendering within the HTML, thus allowing you 100% testability. Furthermore since all of the “requesting” for dynamic data is handled through JQuery, it can easily be updated through AJAX requests, which requires a server to be able to handle a large amounts of requests (thanks Erlang). Oh also, wouldn’t you know it, mochiweb gives us the ability to do Comet interactions too, so Dissident can push updates instead of constant polling.
+
 
 The cool things you might have missed
 -------------------------------------

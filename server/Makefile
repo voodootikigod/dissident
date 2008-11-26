@@ -1,14 +1,14 @@
 ERL          ?= erl
-EBIN_DIRS    := $(wildcard deps/*/ebin)
+EBIN_DIRS    := $(wildcard lib/*/ebin)
 APP          := dissident
 
 all: build_modules erl ebin/$(APP).app
 	
 build_modules:
-	mkdir -p deps/mochiweb/ebin
-	mkdir -p deps/webmachine/ebin
-	(cd deps/mochiweb ;make) 
-	(cd deps/webmachine ;make)
+	mkdir -p lib/mochiweb/ebin
+	mkdir -p lib/webmachine/ebin
+	(cd lib/mochiweb ;make) 
+	(cd lib/webmachine ;make)
 
 init_modules:
 	git submodule init
@@ -16,8 +16,8 @@ init_modules:
 
 update_modules:
 	git submodule update
-	(cd deps/mochiweb ;git remote update) 
-	(cd deps/webmachine ;git remote update)
+	(cd lib/mochiweb ;git remote update) 
+	(cd lib/webmachine ;git remote update)
 
 erl:
 	@$(ERL) -pa $(EBIN_DIRS) -noinput +B \
@@ -28,7 +28,7 @@ docs:
 
 clean: 
 	@echo "removing:"
-	@rm -fv ebin/*.beam ebin/*.app deps/*/ebin/*.app deps/*/ebin/*.beam
+	@rm -fv ebin/*.beam ebin/*.app lib/*/ebin/*.app lib/*/ebin/*.beam
 
 ebin/$(APP).app:
 	@cp -v src/$(APP).app $@
